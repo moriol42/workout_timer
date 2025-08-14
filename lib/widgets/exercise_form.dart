@@ -30,6 +30,7 @@ class _ExerciseFormState extends State<ExerciseForm> {
                   spacing: 8.0,
                   children: <Widget>[
                     TextFormField(
+                      initialValue: widget.name,
                       decoration: const InputDecoration(
                         hintText: 'Name of the exercise',
                       ),
@@ -41,6 +42,7 @@ class _ExerciseFormState extends State<ExerciseForm> {
                       },
                     ),
                     TextFormField(
+                      initialValue: widget.description,
                       decoration: const InputDecoration(
                         hintText: 'Description (optional)',
                       ),
@@ -53,10 +55,12 @@ class _ExerciseFormState extends State<ExerciseForm> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Row(
+              spacing: 10.0,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 ElevatedButton(
                   onPressed: () {
-                    // TODO: go back
+                    Navigator.pop(context);
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all<Color>(const Color.fromRGBO(255, 205, 210, 1)),
@@ -68,6 +72,7 @@ class _ExerciseFormState extends State<ExerciseForm> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       // Process data.
+                      Navigator.pop(context);
                     }
                   },
                   child: const Text('Save'),

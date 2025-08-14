@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/card_item.dart';
-import 'new_exercise_page.dart';
+import 'edit_exercise_page.dart';
 
 List<String> exercises = <String>['Push-ups', 'Squats', 'Jumping jack'];
 
@@ -36,7 +36,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
             context,
             MaterialPageRoute<void>(
               builder: (BuildContext context) {
-                return NewExercisePage();
+                return EditExercisePage(title: 'New exercise');
               },
             ),
           );
