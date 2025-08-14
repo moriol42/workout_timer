@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/card_item.dart';
+
+List<String> exercises = <String>['Push-ups', 'Squats', 'Jumping jack'];
+
 class ExercisesPage extends StatefulWidget {
   const ExercisesPage({super.key, required this.title});
 
@@ -28,19 +32,8 @@ class _ExercisesPageState extends State<ExercisesPage> {
           padding: EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              Card(
-                child: ListTile(
-                  title: Text('Push-ups'),
-                  trailing: IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: Text('Squats'),
-                  trailing: IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
-                ),
-              ),
-            ],
+            for ( var e in exercises ) CardItem(title: e)
+          ],
           ),
         ),
       ),
