@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/card_item.dart';
+import 'new_exercise_page.dart';
 
 List<String> exercises = <String>['Push-ups', 'Squats', 'Jumping jack'];
 
@@ -14,14 +15,8 @@ class ExercisesPage extends StatefulWidget {
 }
 
 class _ExercisesPageState extends State<ExercisesPage> {
-  void _incrementCounter() {
-    setState(() {
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -31,14 +26,21 @@ class _ExercisesPageState extends State<ExercisesPage> {
         child: Padding(
           padding: EdgeInsets.all(8.0),
           child: Column(
-            children: <Widget>[
-            for ( var e in exercises ) CardItem(title: e)
-          ],
+            children: <Widget>[for (var e in exercises) CardItem(title: e)],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+              builder: (BuildContext context) {
+                return NewExercisePage();
+              },
+            ),
+          );
+        },
         tooltip: 'New exercise',
         child: const Icon(Icons.add),
       ),

@@ -1,0 +1,82 @@
+import 'package:flutter/material.dart';
+
+class ExerciseForm extends StatefulWidget {
+  const ExerciseForm({super.key, this.name, this.description});
+
+  final String? name;
+  final String? description;
+
+  @override
+  State<ExerciseForm> createState() => _ExerciseFormState();
+}
+
+class _ExerciseFormState extends State<ExerciseForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: ListView(
+        padding: const EdgeInsets.all(8),
+        children: <Widget>[
+          Card(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 8.0,
+                  children: <Widget>[
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'Name of the exercise',
+                      ),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'Description (optional)',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Row(
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    // TODO: go back
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(const Color.fromRGBO(255, 205, 210, 1)),
+                    foregroundColor: WidgetStateProperty.all<Color>(Colors.red),
+                  ),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      // Process data.
+                    }
+                  },
+                  child: const Text('Save'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
