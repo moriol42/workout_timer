@@ -30,6 +30,10 @@ class _ExercisesPageState extends State<ExercisesPage> {
                 CardItem(
                   title: e.name,
                   description: e.description,
+                  deleteFn: () {
+                    exercises.remove(e);
+                    setState(() {});
+                  },
                   onTap: () async {
                     bool? shouldRefresh = await Navigator.push<bool>(
                       context,

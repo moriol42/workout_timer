@@ -32,6 +32,10 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                 CardItem(
                   title: w.name,
                   description: w.description,
+                  deleteFn: () {
+                    workouts.remove(w);
+                    setState(() {});
+                  },
                   editFn: () {
                     Navigator.push(
                       context,
