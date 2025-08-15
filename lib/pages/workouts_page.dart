@@ -32,7 +32,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                 CardItem(
                   title: w.name,
                   description: w.description,
-                  onTap: () {
+                  editFn: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute<void>(
