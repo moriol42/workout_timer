@@ -22,7 +22,20 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: [
+          IconButton(
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                // Process data.
+                Navigator.pop(context);
+              }
+            },
+            icon: Icon(Icons.save),
+          ),
+        ],
+      ),
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(8.0),
@@ -65,38 +78,6 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
               if (widget.workout != null)
                 for (var (e, d) in widget.workout!.exercisesList)
                   WorkoutExerciseCard(exercise: e, duration: d),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Row(
-                  spacing: 10.0,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(
-                          const Color.fromRGBO(255, 205, 210, 1),
-                        ),
-                        foregroundColor: WidgetStateProperty.all<Color>(
-                          Colors.red,
-                        ),
-                      ),
-                      child: const Text('Cancel'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // Process data.
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: const Text('Save'),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),

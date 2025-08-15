@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'pages/exercises_page.dart';
 import 'pages/workouts_page.dart';
+import 'back/back.dart';
 
 void main() {
   workouts[0].add(exercises[0], Duration(seconds: 30));

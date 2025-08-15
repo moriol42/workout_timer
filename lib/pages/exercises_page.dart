@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:workout_timer/types/exercise.dart';
 
 import '../widgets/card_item.dart';
 import 'edit_exercise_page.dart';
-
-List<Exercise> exercises = [Exercise(name: 'pushups'), Exercise(name: 'squat')];
+import '../back/back.dart';
 
 class ExercisesPage extends StatefulWidget {
   const ExercisesPage({super.key, required this.title});
@@ -32,19 +30,22 @@ class _ExercisesPageState extends State<ExercisesPage> {
                 CardItem(
                   title: e.name,
                   description: e.description,
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    bool? shouldRefresh = await Navigator.push<bool>(
                       context,
-                      MaterialPageRoute<void>(
+                      MaterialPageRoute<bool>(
                         builder: (BuildContext context) {
                           return EditExercisePage(
-                            title: 'Edit Exercise',
+                            createNew: false,
                             name: e.name,
                             description: e.description,
                           );
                         },
                       ),
                     );
+                    if (shouldRefresh == true) {
+                      setState(() {});
+                    }
                   },
                 ),
             ],
@@ -52,15 +53,18 @@ class _ExercisesPageState extends State<ExercisesPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          bool? shouldRefresh = await Navigator.push<bool>(
             context,
-            MaterialPageRoute<void>(
+            MaterialPageRoute<bool>(
               builder: (BuildContext context) {
-                return EditExercisePage(title: 'New exercise');
+                return EditExercisePage(createNew: true);
               },
             ),
           );
+          if (shouldRefresh == true) {
+            setState(() {});
+          }
         },
         tooltip: 'New exercise',
         child: const Icon(Icons.add),
