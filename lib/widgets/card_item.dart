@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../pages/edit_exercise_page.dart';
-
 class CardItem extends StatefulWidget {
-  const CardItem({super.key, required this.title, this.description});
+  const CardItem({super.key, required this.title, this.description, this.onTap});
 
   final String title;
   final String? description;
+  final Function()? onTap;
 
   @override
   State<CardItem> createState() => _CardItemState();
@@ -20,20 +19,7 @@ class _CardItemState extends State<CardItem> {
         title: Text(widget.title),
         subtitle: widget.description != null ? Text(widget.description!) : null,
         trailing: IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute<void>(
-              builder: (BuildContext context) {
-                return EditExercisePage(
-                  title: 'Edit Exercise',
-                  name: widget.title,
-                  description: widget.description,
-                );
-              },
-            ),
-          );
-        },
+        onTap: widget.onTap,
       ),
     );
   }

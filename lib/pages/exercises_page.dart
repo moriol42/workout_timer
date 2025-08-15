@@ -26,7 +26,25 @@ class _ExercisesPageState extends State<ExercisesPage> {
         child: Padding(
           padding: EdgeInsets.all(8.0),
           child: Column(
-            children: <Widget>[for (var e in exercises) CardItem(title: e)],
+            children: <Widget>[
+              for (var e in exercises)
+                CardItem(
+                  title: e,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) {
+                          return EditExercisePage(
+                            title: 'Edit Exercise',
+                            name: e,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+            ],
           ),
         ),
       ),
