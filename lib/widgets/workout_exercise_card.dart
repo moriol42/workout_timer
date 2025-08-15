@@ -4,9 +4,10 @@ import './duration_picker.dart';
 import '../types/exercise.dart';
 
 class WorkoutExerciseCard extends StatefulWidget {
-  const WorkoutExerciseCard({super.key, required this.exercise});
+  const WorkoutExerciseCard({super.key, required this.exercise, this.duration = const Duration(seconds: 30)});
 
   final Exercise exercise;
+  final Duration duration;
 
   @override
   State<WorkoutExerciseCard> createState() => _WorkoutExerciseCardState();
@@ -28,7 +29,7 @@ class _WorkoutExerciseCardState extends State<WorkoutExerciseCard> {
             ),
             if (widget.exercise.description != null)
               Text(widget.exercise.description!),
-            DurationPicker(text: 'Duration'),
+            DurationPicker(text: 'Duration', min: widget.duration.inMinutes, sec: widget.duration.inSeconds % 60),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

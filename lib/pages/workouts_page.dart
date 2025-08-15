@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'edit_workout_page.dart';
 import '../widgets/card_item.dart';
+import '../types/workout.dart';
 
-List<String> workouts = <String>['Day 1', 'Day 2'];
+List<Workout> workouts = [Workout(name: 'test')];
 
 class WorkoutsPage extends StatefulWidget {
   const WorkoutsPage({super.key, required this.title});
@@ -29,7 +30,8 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
             children: <Widget>[
               for (var w in workouts)
                 CardItem(
-                  title: w,
+                  title: w.name,
+                  description: w.description,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -37,7 +39,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                         builder: (BuildContext context) {
                           return EditWorkoutPage(
                             title: 'Edit workout',
-                            name: w,
+                            workout: w,
                           );
                         },
                       ),

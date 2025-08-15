@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:workout_timer/types/exercise.dart';
 import '../widgets/workout_exercise_card.dart';
 import '../widgets/duration_picker.dart';
+import '../types/workout.dart';
 
 class EditWorkoutPage extends StatefulWidget {
-  const EditWorkoutPage({
-    super.key,
-    required this.title,
-    this.name,
-    this.description,
-  });
+  const EditWorkoutPage({super.key, required this.title, this.workout});
 
   final String title;
-  final String? name;
-  final String? description;
+  final Workout? workout;
 
   @override
   State<EditWorkoutPage> createState() => _EditWorkoutPageState();
@@ -45,7 +39,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                       spacing: 8.0,
                       children: <Widget>[
                         TextFormField(
-                          initialValue: widget.name,
+                          initialValue: widget.workout?.name,
                           decoration: const InputDecoration(
                             hintText: 'Name of the exercise',
                           ),
@@ -57,7 +51,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                           },
                         ),
                         TextFormField(
-                          initialValue: widget.description,
+                          initialValue: widget.workout?.description,
                           decoration: const InputDecoration(
                             hintText: 'Description (optional)',
                           ),
@@ -68,7 +62,9 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                   ),
                 ),
               ),
-              WorkoutExerciseCard(exercise: exercise),
+              if (widget.workout != null)
+                for (var (e, d) in widget.workout!.exercisesList)
+                  WorkoutExerciseCard(exercise: e, duration: d),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Row(
