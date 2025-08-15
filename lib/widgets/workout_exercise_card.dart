@@ -28,7 +28,7 @@ class _WorkoutExerciseCardState extends State<WorkoutExerciseCard> {
             ),
             if (widget.exercise.description != null)
               Text(widget.exercise.description!),
-            Row(mainAxisAlignment: MainAxisAlignment.center,children: [Text('Duration:'), DurationPicker()]),
+            DurationPicker(text: 'Duration'),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

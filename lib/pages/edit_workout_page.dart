@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:workout_timer/types/exercise.dart';
 import '../widgets/workout_exercise_card.dart';
+import '../widgets/duration_picker.dart';
 
 class EditWorkoutPage extends StatefulWidget {
   const EditWorkoutPage({
@@ -60,6 +62,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                             hintText: 'Description (optional)',
                           ),
                         ),
+                        DurationPicker(text: 'Break time:'),
                       ],
                     ),
                   ),

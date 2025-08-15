@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class DurationPicker extends StatefulWidget {
-  const DurationPicker({super.key, this.min = 0, this.sec = 30});
+  const DurationPicker({super.key, this.min = 0, this.sec = 30, this.text});
 
+  final String? text;
   final int min;
   final int sec;
 
@@ -25,7 +26,9 @@ class _DurationPickerState extends State<DurationPicker> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        if (widget.text != null) Text(widget.text!),
         NumberPicker(
           value: _min,
           minValue: 0,
