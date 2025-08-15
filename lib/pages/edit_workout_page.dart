@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:workout_timer/types/exercise.dart';
+import '../widgets/workout_exercise_card.dart';
 
 class EditWorkoutPage extends StatefulWidget {
   const EditWorkoutPage({
@@ -16,9 +18,11 @@ class EditWorkoutPage extends StatefulWidget {
   State<EditWorkoutPage> createState() => _EditWorkoutPageState();
 }
 
+var exercise = Exercise(name: "pushups");
+
 class _EditWorkoutPageState extends State<EditWorkoutPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +65,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                   ),
                 ),
               ),
+              WorkoutExerciseCard(exercise: exercise),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Row(
@@ -96,6 +101,11 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        label: const Text('Add Exercise'),
+        icon: const Icon(Icons.add),
       ),
     );
   }
