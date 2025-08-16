@@ -8,6 +8,7 @@ environment:
   sdk: ^3.8.1
 
 dependencies:
+  circular_countdown_timer: ^0.2.4
   flutter:
     sdk: flutter
 

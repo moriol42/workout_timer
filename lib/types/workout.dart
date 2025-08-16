@@ -19,7 +19,7 @@ class Workout implements Iterator {
   }
 
   @override
-  get current {
+  (BaseExercise, Duration)? get current {
     if (_current < _exercisesList.length) {
       if (_currentIsBreak) {
         return (Break(), breakTime);
@@ -27,18 +27,21 @@ class Workout implements Iterator {
         return _exercisesList[_current];
       }
     }
+    return null;
   }
 
   @override
   bool moveNext() {
     if (_current < _exercisesList.length - 1) {
-      if (!_currentIsBreak) {
+      if (_currentIsBreak) {
         _current++;
       }
       _currentIsBreak = !_currentIsBreak;
       return true;
+    } else {
+      _current = 0;
+      return false;
     }
-    return false;
   }
 
   List<(Exercise, Duration)> get exercisesList {

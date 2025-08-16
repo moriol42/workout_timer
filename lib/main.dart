@@ -5,8 +5,8 @@ import 'pages/workouts_page.dart';
 import 'back/back.dart';
 
 void main() {
-  workouts[0].add(exercises[0], Duration(seconds: 30));
-  workouts[0].add(exercises[1], Duration(seconds: 45));
+  workouts[0].add(exercises[0], Duration(seconds: 3));
+  workouts[0].add(exercises[1], Duration(seconds: 4));
 
   runApp(const MyApp());
 }
@@ -57,7 +57,7 @@ class _MainNavBarState extends State<MainNavBar> {
       ),
       body: <Widget>[
         /// Workouts page
-        WorkoutsPage(title: 'Workouts Page'),
+        WorkoutsPage(title: 'Workouts'),
 
         /// Exercises page
         ExercisesPage(title: 'Exercises'),

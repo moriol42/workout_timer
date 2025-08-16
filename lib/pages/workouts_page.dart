@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'edit_workout_page.dart';
+import 'timer_page.dart';
 import '../widgets/card_item.dart';
 import '../types/workout.dart';
 
@@ -32,6 +33,18 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                 CardItem(
                   title: w.name,
                   description: w.description,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) {
+                          return TimerPage(
+                            workout: w,
+                          );
+                        },
+                      ),
+                    );
+                  },
                   deleteFn: () {
                     workouts.remove(w);
                     setState(() {});

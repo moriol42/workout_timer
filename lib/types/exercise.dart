@@ -7,6 +7,11 @@ class Exercise extends BaseExercise {
 
   final String name;
   final String? description;
+
+  @override
+  String toString() {
+    return 'Exercise: $name $description';
+  }
 }
 
 class Break extends BaseExercise {
