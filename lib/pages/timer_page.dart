@@ -64,6 +64,8 @@ class _TimerPageState extends State<TimerPage> {
               },
             ),
           ),
+          if (widget.workout.next != null)
+            Text('Next exercise is: ${widget.workout.next!.$1.name}'),
         ],
       ),
       floatingActionButton: FloatingActionButton(

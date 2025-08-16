@@ -30,6 +30,17 @@ class Workout implements Iterator {
     return null;
   }
 
+  (BaseExercise, Duration)? get next {
+    if (_current < _exercisesList.length - 1) {
+      if (_currentIsBreak) {
+        return _exercisesList[_current + 1];
+      } else {
+        return (Break(), breakTime);
+      }
+    }
+    return null;
+  }
+
   @override
   bool moveNext() {
     if (_current < _exercisesList.length - 1) {
