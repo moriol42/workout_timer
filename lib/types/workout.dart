@@ -39,7 +39,6 @@ class Workout implements Iterator {
       _currentIsBreak = !_currentIsBreak;
       return true;
     } else {
-      resetIterator();
       return false;
     }
   }

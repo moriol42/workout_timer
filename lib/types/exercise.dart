@@ -1,11 +1,13 @@
-class BaseExercise {
-  const BaseExercise();
+abstract class BaseExercise {
+  const BaseExercise(this.name);
+  final String name;
+
+  bool isBreak() => false;
 }
 
 class Exercise extends BaseExercise {
-  const Exercise({required this.name, this.description});
+  const Exercise({required String name, this.description}) : super(name);
 
-  final String name;
   final String? description;
 
   @override
@@ -15,5 +17,8 @@ class Exercise extends BaseExercise {
 }
 
 class Break extends BaseExercise {
-  const Break();
+  const Break() : super('Break');
+
+  @override
+  bool isBreak() => true;
 }

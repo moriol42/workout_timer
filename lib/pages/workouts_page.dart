@@ -5,7 +5,7 @@ import 'timer_page.dart';
 import '../widgets/card_item.dart';
 import '../types/workout.dart';
 
-List<Workout> workouts = [Workout(name: 'test')];
+List<Workout> workouts = [Workout(name: 'test', breakTime: Duration(seconds: 5))];
 
 class WorkoutsPage extends StatefulWidget {
   const WorkoutsPage({super.key, required this.title});
