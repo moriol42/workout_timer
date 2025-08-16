@@ -39,12 +39,17 @@ class Workout implements Iterator {
       _currentIsBreak = !_currentIsBreak;
       return true;
     } else {
-      _current = 0;
+      resetIterator();
       return false;
     }
   }
 
   List<(Exercise, Duration)> get exercisesList {
     return _exercisesList;
+  }
+
+  void resetIterator() {
+    _currentIsBreak = false;
+    _current = 0;
   }
 }

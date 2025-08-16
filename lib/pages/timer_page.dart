@@ -19,6 +19,7 @@ class _TimerPageState extends State<TimerPage> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    widget.workout.resetIterator();
 
     return Scaffold(
       appBar: AppBar(title: Text(widget.workout.name)),
