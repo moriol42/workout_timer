@@ -4,16 +4,34 @@ import './duration_picker.dart';
 import '../types/exercise.dart';
 
 class WorkoutExerciseCard extends StatefulWidget {
-  const WorkoutExerciseCard({super.key, required this.exercise, this.duration = const Duration(seconds: 30)});
+  const WorkoutExerciseCard({
+    super.key,
+    required this.exercise,
+    this.controller,
+  });
 
+  final WorkoutExerciseController? controller;
   final Exercise exercise;
-  final Duration duration;
 
   @override
   State<WorkoutExerciseCard> createState() => _WorkoutExerciseCardState();
 }
 
 class _WorkoutExerciseCardState extends State<WorkoutExerciseCard> {
+  late DurationPickerController controllerTime;
+  late Exercise _exercise;
+
+  @override
+  void initState() {
+    controllerTime = DurationPickerController(
+      duration: widget.controller?.duration ?? Duration(seconds: 30),
+    );
+    _exercise = widget.exercise;
+    widget.controller?.exercise = widget.exercise;
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -24,12 +42,17 @@ class _WorkoutExerciseCardState extends State<WorkoutExerciseCard> {
           spacing: 3,
           children: [
             Text(
-              widget.exercise.name,
+              _exercise.name,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            if (widget.exercise.description != null)
-              Text(widget.exercise.description!),
-            DurationPicker(text: 'Duration', min: widget.duration.inMinutes, sec: widget.duration.inSeconds % 60),
+            if (_exercise.description != null) Text(_exercise.description!),
+            DurationPicker(
+              text: 'Duration',
+              controller: controllerTime,
+              onChanged: () {
+                widget.controller?.duration = controllerTime.duration;
+              },
+            ),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -44,4 +67,11 @@ class _WorkoutExerciseCardState extends State<WorkoutExerciseCard> {
       ),
     );
   }
+}
+
+class WorkoutExerciseController {
+  WorkoutExerciseController({this.duration = const Duration(seconds: 30)});
+
+  Duration duration;
+  late Exercise exercise;
 }

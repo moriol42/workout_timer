@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class DurationPicker extends StatefulWidget {
-  const DurationPicker({super.key, this.min = 0, this.sec = 30, this.text});
+  const DurationPicker({super.key, this.text, this.controller, this.onChanged});
 
   final String? text;
-  final int min;
-  final int sec;
+  final DurationPickerController? controller;
+  final Function()? onChanged;
 
   @override
   State<DurationPicker> createState() => _DurationPickerState();
@@ -19,8 +19,8 @@ class _DurationPickerState extends State<DurationPicker> {
   @override
   void initState() {
     super.initState();
-    _min = widget.min;
-    _sec = widget.sec;
+    _min = widget.controller?.duration.inMinutes ?? 0;
+    _sec = (widget.controller?.duration.inSeconds ?? 30) % 60;
   }
 
   @override
@@ -33,17 +33,37 @@ class _DurationPickerState extends State<DurationPicker> {
           value: _min,
           minValue: 0,
           maxValue: 60,
-          onChanged: (value) => setState(() => _min = value),
+          onChanged: (value) {
+            widget.controller?.duration = Duration(
+              minutes: _min,
+              seconds: _sec,
+            );
+            setState(() => _min = value);
+            if (widget.onChanged != null) widget.onChanged!();
+          },
         ),
         Text('min'),
         NumberPicker(
           value: _sec,
           minValue: 1,
           maxValue: 60,
-          onChanged: (value) => setState(() => _sec = value),
+          onChanged: (value) {
+            widget.controller?.duration = Duration(
+              minutes: _min,
+              seconds: _sec,
+            );
+            setState(() => _sec = value);
+            if (widget.onChanged != null) widget.onChanged!();
+          },
         ),
         Text('s'),
       ],
     );
   }
+}
+
+class DurationPickerController {
+  DurationPickerController({this.duration = const Duration(seconds: 0)});
+
+  Duration duration;
 }

@@ -1,35 +1,84 @@
 import 'package:flutter/material.dart';
-import 'package:workout_timer/types/exercise.dart';
 import '../widgets/workout_exercise_card.dart';
 import '../widgets/duration_picker.dart';
 import '../types/workout.dart';
 
-class EditWorkoutPage extends StatefulWidget {
-  const EditWorkoutPage({super.key, required this.title, this.workout});
+import '../back/back.dart';
 
-  final String title;
+class EditWorkoutPage extends StatefulWidget {
+  const EditWorkoutPage({super.key, this.createNew = false, this.workout});
+
   final Workout? workout;
+  final bool createNew;
 
   @override
   State<EditWorkoutPage> createState() => _EditWorkoutPageState();
 }
 
-var exercise = Exercise(name: "pushups");
-
 class _EditWorkoutPageState extends State<EditWorkoutPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late TextEditingController controllerName;
+  late TextEditingController controllerDescr;
+  late DurationPickerController controllerBreakTime;
+  final List<WorkoutExerciseController> _controllersExerciseCards = [];
+  List<WorkoutExerciseCard> _exercisesCards = [];
+
+  @override
+  void initState() {
+    controllerName = TextEditingController(text: widget.workout?.name);
+    controllerDescr = TextEditingController(text: widget.workout?.description);
+    controllerBreakTime = DurationPickerController(
+      duration: widget.workout?.breakTime ?? const Duration(seconds: 30),
+    );
+
+    if (!widget.createNew) {
+      _exercisesCards = widget.workout!.exercisesList.map((tuple) {
+        var controller = WorkoutExerciseController(duration: tuple.$2);
+        _controllersExerciseCards.add(controller);
+        return WorkoutExerciseCard(exercise: tuple.$1, controller: controller);
+      }).toList();
+    }
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controllerName.dispose();
+    controllerDescr.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.createNew ? 'New Workout' : 'Edit Workout'),
         actions: [
           IconButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                // Process data.
-                Navigator.pop(context);
+                var descr = controllerDescr.text == ''
+                    ? null
+                    : controllerDescr.text;
+                var newWorkout = Workout(
+                  name: controllerName.text,
+                  description: descr,
+                  breakTime: controllerBreakTime.duration,
+                  exercisesList: _controllersExerciseCards
+                      .map((c) => (c.exercise, c.duration))
+                      .toList(),
+                );
+                debugPrint(
+                  'newWorkout : ${newWorkout.toString()}, name : ${newWorkout.name}',
+                );
+                if (widget.createNew) {
+                  workouts.add(newWorkout);
+                } else {
+                  int i = workouts.indexWhere((w) => w == widget.workout!);
+                  workouts[i] = newWorkout;
+                }
+                Navigator.pop(context, true);
               }
             },
             icon: Icon(Icons.save),
@@ -52,7 +101,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                       spacing: 8.0,
                       children: <Widget>[
                         TextFormField(
-                          initialValue: widget.workout?.name,
+                          controller: controllerName,
                           decoration: const InputDecoration(
                             hintText: 'Name of the exercise',
                           ),
@@ -64,26 +113,35 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                           },
                         ),
                         TextFormField(
-                          initialValue: widget.workout?.description,
+                          controller: controllerDescr,
                           decoration: const InputDecoration(
                             hintText: 'Description (optional)',
                           ),
                         ),
-                        DurationPicker(text: 'Break time:'),
+                        DurationPicker(
+                          text: 'Break time:',
+                          controller: controllerBreakTime,
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-              if (widget.workout != null)
-                for (var (e, d) in widget.workout!.exercisesList)
-                  WorkoutExerciseCard(exercise: e, duration: d),
+              for (var c in _exercisesCards) c,
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            var c = WorkoutExerciseController();
+            _exercisesCards.add(
+              WorkoutExerciseCard(exercise: exercises[0], controller: c),
+            );
+            _controllersExerciseCards.add(c);
+          });
+        },
         label: const Text('Add Exercise'),
         icon: const Icon(Icons.add),
       ),

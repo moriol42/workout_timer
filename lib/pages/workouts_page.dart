@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'edit_workout_page.dart';
 import 'timer_page.dart';
 import '../widgets/card_item.dart';
-import '../types/workout.dart';
 
-List<Workout> workouts = [Workout(name: 'test', breakTime: Duration(seconds: 5))];
+import '../back/back.dart';
 
 class WorkoutsPage extends StatefulWidget {
   const WorkoutsPage({super.key, required this.title});
@@ -38,9 +37,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                       context,
                       MaterialPageRoute<void>(
                         builder: (BuildContext context) {
-                          return TimerPage(
-                            workout: w,
-                          );
+                          return TimerPage(workout: w);
                         },
                       ),
                     );
@@ -49,18 +46,18 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                     workouts.remove(w);
                     setState(() {});
                   },
-                  editFn: () {
-                    Navigator.push(
+                  editFn: () async {
+                    bool? shouldRefresh = await Navigator.push(
                       context,
-                      MaterialPageRoute<void>(
+                      MaterialPageRoute<bool>(
                         builder: (BuildContext context) {
-                          return EditWorkoutPage(
-                            title: 'Edit workout',
-                            workout: w,
-                          );
+                          return EditWorkoutPage(createNew: false, workout: w);
                         },
                       ),
                     );
+                    if (shouldRefresh == true) {
+                      setState(() {});
+                    }
                   },
                 ),
             ],
@@ -68,15 +65,18 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          bool? shouldRefresh = await Navigator.push(
             context,
-            MaterialPageRoute<void>(
+            MaterialPageRoute<bool>(
               builder: (BuildContext context) {
-                return EditWorkoutPage(title: 'New workout');
+                return EditWorkoutPage(createNew: true);
               },
             ),
           );
+          if (shouldRefresh == true) {
+            setState(() {});
+          }
         },
         tooltip: 'New workout',
         child: const Icon(Icons.add),

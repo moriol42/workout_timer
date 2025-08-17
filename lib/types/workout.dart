@@ -5,12 +5,13 @@ class Workout implements Iterator {
     required this.name,
     this.description,
     this.breakTime = const Duration(seconds: 30),
-  });
+    List<(Exercise, Duration)>? exercisesList,
+  }) : _exercisesList = exercisesList ?? [];
 
   String name;
   String? description;
   Duration breakTime;
-  final List<(Exercise, Duration)> _exercisesList = [];
+  final List<(Exercise, Duration)> _exercisesList;
   int _current = 0;
   bool _currentIsBreak = false;
 
