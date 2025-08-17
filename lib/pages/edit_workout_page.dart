@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:workout_timer/types/exercise.dart';
 import '../widgets/workout_exercise_card.dart';
 import '../widgets/duration_picker.dart';
+import '../widgets/exercise_chooser.dart';
 import '../types/workout.dart';
 
 import '../back/back.dart';
@@ -22,6 +24,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
   late DurationPickerController controllerBreakTime;
   final List<WorkoutExerciseController> _controllersExerciseCards = [];
   List<WorkoutExerciseCard> _exercisesCards = [];
+  bool isChecked = false;
 
   @override
   void initState() {
@@ -133,14 +136,27 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          setState(() {
-            var c = WorkoutExerciseController();
-            _exercisesCards.add(
-              WorkoutExerciseCard(exercise: exercises[0], controller: c),
-            );
-            _controllersExerciseCards.add(c);
-          });
+        onPressed: () async {
+          List<Exercise>? exercisesList = await showDialog(
+            context: context,
+            builder: (_) {
+              return StatefulBuilder(
+                builder: (BuildContext context, StateSetter myState) =>
+                    ExerciseChooser()
+              );
+            },
+          );
+
+          if (exercisesList?.isNotEmpty ?? false) {
+            for (var e in exercisesList!) {
+              var c = WorkoutExerciseController();
+              _exercisesCards.add(
+                WorkoutExerciseCard(exercise: e, controller: c),
+              );
+              _controllersExerciseCards.add(c);
+            }
+            setState(() {});
+          }
         },
         label: const Text('Add Exercise'),
         icon: const Icon(Icons.add),

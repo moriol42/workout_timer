@@ -20,12 +20,8 @@ class GongratulationDialog<T> extends PopupRoute<T> {
     Animation<double> secondaryAnimation,
   ) {
     return Center(
-      // Provide DefaultTextStyle to ensure that the dialog's text style
-      // matches the rest of the text in the app.
       child: DefaultTextStyle(
         style: Theme.of(context).textTheme.bodyMedium!,
-        // UnconstrainedBox is used to make the dialog size itself
-        // to fit to the size of the content.
         child: UnconstrainedBox(
           child: Container(
             padding: const EdgeInsets.all(16.0),
