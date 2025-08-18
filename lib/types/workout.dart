@@ -15,7 +15,7 @@ class Workout implements Iterator {
     List<(Exercise, Duration)>? exercisesList,
   }) : exercisesList = exercisesList ?? [];
 
-  Workout.fromJson(Map<String, dynamic> json, List<Exercise> listExercises)
+  Workout.fromJson(Map<String, dynamic> json, Iterable<Exercise> listExercises)
     : name = json['name'] as String,
       breakTime = Duration(seconds: json['breakTime'] as int),
       exercisesList = [] {

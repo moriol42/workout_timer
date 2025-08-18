@@ -4,8 +4,8 @@ import 'pages/exercises_page.dart';
 import 'pages/workouts_page.dart';
 import 'back/back.dart';
 
-void main() {
-  loadData();
+void main() async {
+  await loadData();
 
   runApp(const MyApp());
 }
@@ -39,8 +39,6 @@ class _MainNavBarState extends State<MainNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentPageIndex,
