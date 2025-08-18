@@ -27,5 +27,5 @@ flutter:
 
   assets:
     - assets/ding.mp3
-
-
+    - assets/gong.mp3
+    - assets/beep.mp3

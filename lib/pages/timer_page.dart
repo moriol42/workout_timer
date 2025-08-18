@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-
 import '../types/workout.dart';
 import '../widgets/congratulation_dialog.dart';
 
@@ -18,6 +17,7 @@ class TimerPage extends StatefulWidget {
 class _TimerPageState extends State<TimerPage> {
   final player = AudioPlayer();
   final CountDownController _controller = CountDownController();
+  int oldSec = 0;
 
   @override
   void initState() {
@@ -54,8 +54,9 @@ class _TimerPageState extends State<TimerPage> {
               textFormat: CountdownTextFormat.S,
               isReverse: true,
               isReverseAnimation: true,
-              onComplete: () async{
-                await player.play(AssetSource('ding.mp3'));
+              onComplete: () async {
+                await player.stop();
+                await player.play(AssetSource('gong.mp3'));
 
                 if (widget.workout.moveNext()) {
                   _controller.restart(
@@ -65,6 +66,16 @@ class _TimerPageState extends State<TimerPage> {
                   setState(() {});
                 } else {
                   Navigator.of(context).push(GongratulationDialog<void>());
+                }
+              },
+              onChange: (value) async {
+                int sec = int.parse(value);
+                if (oldSec != sec) {
+                  if (sec < 5) {
+                    await player.stop();
+                    await player.play(AssetSource('beep.mp3'));
+                  }
+                  oldSec = sec;
                 }
               },
             ),
