@@ -10,7 +10,7 @@ class ExerciseChooser extends StatefulWidget {
 }
 
 class _ExerciseChooserState extends State<ExerciseChooser> {
-  List<bool> isChecked = [for (var _ in exercises) false];
+  List<bool> isChecked = [for (var _ in iterExercises()) false];
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class _ExerciseChooserState extends State<ExerciseChooser> {
                     ),
                     shrinkWrap: true,
                     children: <Widget>[
-                      for (var (i, e) in exercises.indexed)
+                      for (var (i, e) in iterExercises().indexed)
                         Row(
                           children: [
                             Checkbox(
@@ -64,7 +64,7 @@ class _ExerciseChooserState extends State<ExerciseChooser> {
                   onPressed: () {
                     Navigator.pop(
                       context,
-                      exercises.indexed
+                      iterExercises().indexed
                           .where((x) => isChecked[x.$1])
                           .map((x) => x.$2)
                           .toList(),

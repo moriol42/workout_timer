@@ -28,7 +28,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
           padding: EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              for (var w in workouts)
+              for (var w in iterWorkouts())
                 CardItem(
                   title: w.name,
                   description: w.description,
@@ -43,7 +43,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                     );
                   },
                   deleteFn: () {
-                    workouts.remove(w);
+                    removeWorkout(w);
                     setState(() {});
                   },
                   editFn: () async {

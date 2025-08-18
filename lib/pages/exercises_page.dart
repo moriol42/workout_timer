@@ -26,12 +26,12 @@ class _ExercisesPageState extends State<ExercisesPage> {
           padding: EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              for (var e in exercises)
+              for (var e in iterExercises())
                 CardItem(
                   title: e.name,
                   description: e.description,
                   deleteFn: () {
-                    exercises.remove(e);
+                    removeExercise(e);
                     setState(() {});
                   },
                   onTap: () async {
@@ -41,8 +41,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
                         builder: (BuildContext context) {
                           return EditExercisePage(
                             createNew: false,
-                            name: e.name,
-                            description: e.description,
+                            exercise: e,
                           );
                         },
                       ),

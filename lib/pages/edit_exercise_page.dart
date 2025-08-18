@@ -7,12 +7,10 @@ class EditExercisePage extends StatefulWidget {
   const EditExercisePage({
     super.key,
     this.createNew = false,
-    this.name,
-    this.description,
+    this.exercise,
   });
 
-  final String? name;
-  final String? description;
+  final Exercise? exercise;
   final bool createNew;
 
   @override
@@ -26,8 +24,8 @@ class _EditExercisePageState extends State<EditExercisePage> {
 
   @override
   void initState() {
-    controllerName = TextEditingController(text : widget.name);
-    controllerDescr = TextEditingController(text : widget.description);
+    controllerName = TextEditingController(text : widget.exercise?.name);
+    controllerDescr = TextEditingController(text : widget.exercise?.description);
     super.initState();
   }
 
@@ -49,10 +47,9 @@ class _EditExercisePageState extends State<EditExercisePage> {
               if (_formKey.currentState!.validate()) {
                 var descr = controllerDescr.text == '' ? null : controllerDescr.text;
                 if (widget.createNew) {
-                  exercises.add(Exercise(name: controllerName.text, description: descr));
+                  addExercise(Exercise(name: controllerName.text, description: descr));
                 } else {
-                  int i = exercises.indexWhere((e) => e.name == widget.name!);
-                  exercises[i] = Exercise(name: controllerName.text, description: descr);
+                  editExercise(widget.exercise!, controllerName.text, descr);
                 }
                 Navigator.pop(context, true);
               }

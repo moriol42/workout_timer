@@ -64,22 +64,25 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                 var descr = controllerDescr.text == ''
                     ? null
                     : controllerDescr.text;
-                var newWorkout = Workout(
-                  name: controllerName.text,
-                  description: descr,
-                  breakTime: controllerBreakTime.duration,
-                  exercisesList: _controllersExerciseCards
-                      .map((c) => (c.exercise, c.duration))
-                      .toList(),
-                );
-                debugPrint(
-                  'newWorkout : ${newWorkout.toString()}, name : ${newWorkout.name}',
-                );
+                var newExercisesList = _controllersExerciseCards
+                    .map((c) => (c.exercise, c.duration))
+                    .toList();
                 if (widget.createNew) {
-                  workouts.add(newWorkout);
+                  var newWorkout = Workout(
+                    name: controllerName.text,
+                    description: descr,
+                    breakTime: controllerBreakTime.duration,
+                    exercisesList: newExercisesList,
+                  );
+                  addWorkout(newWorkout);
                 } else {
-                  int i = workouts.indexWhere((w) => w == widget.workout!);
-                  workouts[i] = newWorkout;
+                  editWorkout(
+                    widget.workout!,
+                    controllerName.text,
+                    descr,
+                    controllerBreakTime.duration,
+                    newExercisesList,
+                  );
                 }
                 Navigator.pop(context, true);
               }
@@ -142,7 +145,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
             builder: (_) {
               return StatefulBuilder(
                 builder: (BuildContext context, StateSetter myState) =>
-                    ExerciseChooser()
+                    ExerciseChooser(),
               );
             },
           );

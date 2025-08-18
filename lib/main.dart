@@ -5,8 +5,7 @@ import 'pages/workouts_page.dart';
 import 'back/back.dart';
 
 void main() {
-  workouts[0].add(exercises[0], Duration(seconds: 3));
-  workouts[0].add(exercises[1], Duration(seconds: 4));
+  loadData();
 
   runApp(const MyApp());
 }

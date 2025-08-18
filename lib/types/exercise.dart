@@ -1,14 +1,26 @@
 abstract class BaseExercise {
-  const BaseExercise(this.name);
-  final String name;
+  BaseExercise(this.name);
+  String name;
 
   bool isBreak() => false;
 }
 
 class Exercise extends BaseExercise {
-  const Exercise({required String name, this.description}) : super(name);
+  String? description;
 
-  final String? description;
+  Exercise({required String name, this.description}) : super(name);
+
+  Exercise.fromJson(Map<String, dynamic> json) : super(json['name'] as String) {
+    description = json['description'] as String;
+    if (description == '') {
+      description = null;
+    }
+  }
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'description': description ?? '',
+  };
 
   @override
   String toString() {
@@ -17,7 +29,7 @@ class Exercise extends BaseExercise {
 }
 
 class Break extends BaseExercise {
-  const Break() : super('Break');
+  Break() : super('Break');
 
   @override
   bool isBreak() => true;
