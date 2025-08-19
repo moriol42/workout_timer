@@ -81,18 +81,21 @@ Iterable<Workout> iterWorkouts() sync* {
 }
 
 Future<()> loadData() async {
-  var exercisesJson = await _dataStorage.readData('exercises.json');
-  var exercisesMap = jsonDecode(exercisesJson);
-  for (var eJson in exercisesMap) {
-    _exercises.add(Exercise.fromJson(eJson));
-  }
+  try {
+    var exercisesJson = await _dataStorage.readData('exercises.json');
+    var exercisesMap = jsonDecode(exercisesJson);
+    for (var eJson in exercisesMap) {
+      _exercises.add(Exercise.fromJson(eJson));
+    }
+  } catch (e) {}
 
-  var workoutsJson = await _dataStorage.readData('workouts.json');
-  var workoutsMap = jsonDecode(workoutsJson);
-  for (var wJson in workoutsMap) {
-    _workouts.add(Workout.fromJson(wJson, iterExercises()));
-  }
-
+  try {
+    var workoutsJson = await _dataStorage.readData('workouts.json');
+    var workoutsMap = jsonDecode(workoutsJson);
+    for (var wJson in workoutsMap) {
+      _workouts.add(Workout.fromJson(wJson, iterExercises()));
+    }
+  } catch (e) {}
   return ();
 }
 

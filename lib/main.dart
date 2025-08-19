@@ -5,6 +5,7 @@ import 'pages/workouts_page.dart';
 import 'back/back.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await loadData();
 
   runApp(const MyApp());
@@ -48,8 +49,14 @@ class _MainNavBarState extends State<MainNavBar> {
           });
         },
         destinations: <Widget>[
-          NavigationDestination(icon: Icon(Icons.assignment), label: navTitles[0]),
-          NavigationDestination(icon: Icon(Icons.fitness_center), label: navTitles[1]),
+          NavigationDestination(
+            icon: Icon(Icons.assignment),
+            label: navTitles[0],
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.fitness_center),
+            label: navTitles[1],
+          ),
         ],
       ),
       body: <Widget>[
@@ -58,7 +65,7 @@ class _MainNavBarState extends State<MainNavBar> {
 
         /// Exercises page
         ExercisesPage(title: 'Exercises'),
-        ][currentPageIndex],
+      ][currentPageIndex],
     );
   }
 }
