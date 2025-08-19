@@ -134,6 +134,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                 ),
               ),
               for (var c in _exercisesCards) c,
+              SizedBox(height: 60),
             ],
           ),
         ),
