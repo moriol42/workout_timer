@@ -5,15 +5,6 @@ import '../types/workout.dart';
 
 import 'data_storage.dart';
 
-// List<Exercise> _exercises = [
-//   Exercise(name: 'pushups'),
-//   Exercise(name: 'squat'),
-// ];
-
-// List<Workout> _workouts = [
-//   Workout(name: 'test', breakTime: Duration(seconds: 25), exercisesList: [(_exercises[0], Duration(seconds: 45)), (_exercises[1], Duration(seconds: 30))]),
-// ];
-
 List<Exercise> _exercises = [];
 
 List<Workout> _workouts = [];
@@ -60,12 +51,14 @@ void editWorkout(
   String? newDescription,
   Duration newBreakTime,
   List<(Exercise, Duration)> newExercisesList,
+  int repetitions,
 ) {
   var i = _workouts.indexOf(w);
   _workouts[i].name = newName;
   _workouts[i].description = newDescription;
   _workouts[i].breakTime = newBreakTime;
   _workouts[i].exercisesList = newExercisesList;
+  _workouts[i].repetitions = repetitions;
   storeWorkout();
 }
 

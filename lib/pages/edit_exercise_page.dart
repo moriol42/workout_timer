@@ -66,7 +66,7 @@ class _EditExercisePageState extends State<EditExercisePage> {
         children: <Widget>[
           Card(
             child: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(20.0),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -76,7 +76,7 @@ class _EditExercisePageState extends State<EditExercisePage> {
                     TextFormField(
                       controller: controllerName,
                       decoration: const InputDecoration(
-                        hintText: 'Name of the exercise',
+                        labelText: 'Name',
                       ),
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
@@ -88,7 +88,7 @@ class _EditExercisePageState extends State<EditExercisePage> {
                     TextFormField(
                       controller: controllerDescr,
                       decoration: const InputDecoration(
-                        hintText: 'Description (optional)',
+                        labelText: 'Description (optional)',
                       ),
                     ),
                   ],

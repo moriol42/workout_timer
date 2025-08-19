@@ -21,10 +21,12 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController controllerName;
   late TextEditingController controllerDescr;
+  late TextEditingController controllerRepet;
   late DurationPickerController controllerBreakTime;
   final List<WorkoutExerciseController> _controllersExerciseCards = [];
   List<WorkoutExerciseCard> _exercisesCards = [];
   bool isChecked = false;
+  bool _expanded = true;
 
   @override
   void initState() {
@@ -32,6 +34,9 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
     controllerDescr = TextEditingController(text: widget.workout?.description);
     controllerBreakTime = DurationPickerController(
       duration: widget.workout?.breakTime ?? const Duration(seconds: 30),
+    );
+    controllerRepet = TextEditingController(
+      text: '${widget.workout?.repetitions ?? 1}',
     );
 
     if (!widget.createNew) {
@@ -73,6 +78,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                     description: descr,
                     breakTime: controllerBreakTime.duration,
                     exercisesList: newExercisesList,
+                    repetitions: int.parse(controllerRepet.text),
                   );
                   addWorkout(newWorkout);
                 } else {
@@ -82,6 +88,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                     descr,
                     controllerBreakTime.duration,
                     newExercisesList,
+                    int.parse(controllerRepet.text),
                   );
                 }
                 Navigator.pop(context, true);
@@ -99,18 +106,16 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
             children: <Widget>[
               Card(
                 child: Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(20.0),
                   child: Form(
                     key: _formKey,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       spacing: 8.0,
                       children: <Widget>[
                         TextFormField(
                           controller: controllerName,
-                          decoration: const InputDecoration(
-                            hintText: 'Name of the exercise',
-                          ),
+                          decoration: const InputDecoration(labelText: 'Name'),
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter some text';
@@ -121,12 +126,56 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                         TextFormField(
                           controller: controllerDescr,
                           decoration: const InputDecoration(
-                            hintText: 'Description (optional)',
+                            labelText: 'Description (optional)',
                           ),
                         ),
-                        DurationPicker(
-                          text: 'Break time:',
-                          controller: controllerBreakTime,
+
+                        if (_expanded)
+                          DurationPicker(
+                            text: 'Break time:',
+                            controller: controllerBreakTime,
+                          ),
+
+                        if (_expanded)
+                          TextFormField(
+                            controller: controllerRepet,
+                            decoration: const InputDecoration(
+                              labelText: 'Number of repetitions',
+
+                              suffixText: 'repetitions',
+                            ),
+                            validator: (String? value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter some number';
+                              }
+                              if (int.tryParse(value) == null) {
+                                return 'You must enter a number';
+                              }
+                              return null;
+                            },
+                          ),
+
+                        SizedBox(height: 10),
+                        FilledButton.tonal(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: _expanded
+                                ? [
+                                    Text('Less'),
+                                    SizedBox(width: 5),
+                                    Icon(Icons.expand_less),
+                                  ]
+                                : [
+                                    Text('More'),
+                                    SizedBox(width: 5),
+                                    Icon(Icons.expand_more),
+                                  ],
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _expanded = !_expanded;
+                            });
+                          },
                         ),
                       ],
                     ),

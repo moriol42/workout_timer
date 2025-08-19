@@ -6,19 +6,23 @@ class Workout implements Iterator {
   Duration breakTime;
   List<(Exercise, Duration)> exercisesList;
   int _current = 0;
+  int _currentRepetition = 0;
   bool _currentIsBreak = false;
+  int repetitions;
 
   Workout({
     required this.name,
     this.description,
     this.breakTime = const Duration(seconds: 30),
     List<(Exercise, Duration)>? exercisesList,
+    this.repetitions = 1,
   }) : exercisesList = exercisesList ?? [];
 
   Workout.fromJson(Map<String, dynamic> json, Iterable<Exercise> listExercises)
     : name = json['name'] as String,
       breakTime = Duration(seconds: json['breakTime'] as int),
-      exercisesList = [] {
+      exercisesList = [],
+      repetitions = json['repetitions'] ?? 1 {
     description = json['description'] as String;
     if (description == '') {
       description = null;
@@ -41,6 +45,7 @@ class Workout implements Iterator {
     'exercisesList': [
       for (var e in exercisesList) [e.$1.name, e.$2.inSeconds],
     ],
+    'repetitions': repetitions,
   };
 
   void add(Exercise e, Duration d) {
@@ -66,6 +71,12 @@ class Workout implements Iterator {
       } else {
         return (Break(), breakTime);
       }
+    } else if (_currentRepetition < repetitions - 1) {
+      if (_currentIsBreak) {
+        return exercisesList[0];
+      } else {
+        return (Break(), breakTime);
+      }
     }
     return null;
   }
@@ -78,6 +89,13 @@ class Workout implements Iterator {
       }
       _currentIsBreak = !_currentIsBreak;
       return true;
+    } else if (_currentRepetition < repetitions - 1) {
+      if (_currentIsBreak) {
+        _current = 0;
+        _currentRepetition++;
+      }
+      _currentIsBreak = !_currentIsBreak;
+      return true;
     } else {
       return false;
     }
@@ -86,5 +104,6 @@ class Workout implements Iterator {
   void resetIterator() {
     _currentIsBreak = false;
     _current = 0;
+    _currentRepetition = 0;
   }
 }
