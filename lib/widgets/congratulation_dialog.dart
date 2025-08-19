@@ -27,7 +27,7 @@ class GongratulationDialog<T> extends PopupRoute<T> {
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
+              color: Theme.of(context).canvasColor
             ),
             child: Column(
               children: <Widget>[

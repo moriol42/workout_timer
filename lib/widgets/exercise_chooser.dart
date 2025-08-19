@@ -22,7 +22,6 @@ class _ExerciseChooserState extends State<ExerciseChooser> {
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
             ),
             child: Column(
               children: <Widget>[

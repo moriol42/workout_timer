@@ -53,8 +53,10 @@ class _TimerPageState extends State<TimerPage> {
               controller: _controller,
               width: MediaQuery.of(context).size.width / 2,
               height: MediaQuery.of(context).size.height / 2,
-              ringColor: Colors.grey[300]!,
-              fillColor: theme.primaryColor,
+              ringColor: theme.colorScheme.brightness == Brightness.dark
+                  ? Colors.grey[800]!
+                  : Colors.grey[300]!,
+              fillColor: theme.colorScheme.primary,
               strokeWidth: 15.0,
               strokeCap: StrokeCap.round,
               textStyle: const TextStyle(

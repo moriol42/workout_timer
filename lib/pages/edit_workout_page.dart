@@ -194,8 +194,8 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
             context: context,
             builder: (_) {
               return StatefulBuilder(
-                builder: (BuildContext context, StateSetter myState) =>
-                    ExerciseChooser(),
+                builder: (BuildContext contextPopup, StateSetter myState) =>
+                     ExerciseChooser(),
               );
             },
           );
