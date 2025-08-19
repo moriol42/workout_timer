@@ -16,6 +16,7 @@ class TimerPage extends StatefulWidget {
 
 class _TimerPageState extends State<TimerPage> {
   final player = AudioPlayer();
+  final x = AudioCache();
   final CountDownController _controller = CountDownController();
   int oldSec = 0;
 
@@ -23,6 +24,15 @@ class _TimerPageState extends State<TimerPage> {
   void initState() {
     super.initState();
     widget.workout.resetIterator();
+
+    player.setReleaseMode(ReleaseMode.stop);
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
+
+    super.dispose();
   }
 
   @override
