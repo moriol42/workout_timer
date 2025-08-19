@@ -20,6 +20,7 @@ class WorkoutExerciseCard extends StatefulWidget {
 class _WorkoutExerciseCardState extends State<WorkoutExerciseCard> {
   late DurationPickerController controllerTime;
   late Exercise _exercise;
+  bool _expanded = false;
 
   @override
   void initState() {
@@ -34,38 +35,97 @@ class _WorkoutExerciseCardState extends State<WorkoutExerciseCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 3,
-          children: [
-            Text(
-              _exercise.name,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            if (_exercise.description != null) Text(_exercise.description!),
-            DurationPicker(
-              text: 'Duration',
-              controller: controllerTime,
-              onChanged: () {
-                widget.controller?.duration = controllerTime.duration;
-              },
-            ),
+    if (_expanded) {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 3,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    _exercise.name,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _expanded = !_expanded;
+                      });
+                    },
+                    icon: Icon(Icons.expand_less),
+                  ),
+                ],
+              ),
+              if (_exercise.description != null) Text(_exercise.description!),
+              DurationPicker(
+                text: 'Duration',
+                controller: controllerTime,
+                onChanged: () {
+                  widget.controller?.duration = controllerTime.duration;
+                },
+              ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(onPressed: () {}, icon: Icon(Icons.arrow_upward)),
-                IconButton(onPressed: () {}, icon: Icon(Icons.arrow_downward)),
-                IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
-              ],
-            ),
-          ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Spacer(),
+                  IconButton(onPressed: () {}, icon: Icon(Icons.arrow_upward)),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.arrow_downward),
+                  ),
+                  Spacer(),
+                  IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 3,
+            children: [
+              Row(
+                children: [
+                  IconButton(onPressed: () {}, icon: Icon(Icons.arrow_upward)),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.arrow_downward),),
+
+                  SizedBox(width: 20),
+                  Text(
+                    _exercise.name,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(width: 20),
+                  Text(
+                    '${controllerTime.duration.inMinutes}:${controllerTime.duration.inSeconds % 60}',
+                  ),
+                  Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _expanded = !_expanded;
+                      });
+                    },
+                    icon: Icon(Icons.expand_more),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 }
 
