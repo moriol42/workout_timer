@@ -23,9 +23,9 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
         //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
+      body: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               for (var w in iterWorkouts())
@@ -60,6 +60,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                     }
                   },
                 ),
+              SizedBox(height: 60),
             ],
           ),
         ),

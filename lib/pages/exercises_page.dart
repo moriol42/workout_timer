@@ -21,9 +21,9 @@ class _ExercisesPageState extends State<ExercisesPage> {
         //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
+      body: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               for (var e in iterExercises())
@@ -51,10 +51,12 @@ class _ExercisesPageState extends State<ExercisesPage> {
                     }
                   },
                 ),
+              SizedBox(height: 60),
             ],
           ),
         ),
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           bool? shouldRefresh = await Navigator.push<bool>(
