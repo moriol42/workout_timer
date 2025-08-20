@@ -5,11 +5,13 @@ class Workout implements Iterator {
   String? description;
   Duration breakTime;
   List<(Exercise, Duration)> exercisesList;
+  int repetitions;
+  Duration interRepetitionBreak;
+
   int _current = 0;
   int _currentRepetition = 0;
   bool _currentIsBreak = true;
-  int repetitions;
-  bool _started = false; 
+  bool _started = false;
 
   Workout({
     required this.name,
@@ -17,13 +19,18 @@ class Workout implements Iterator {
     this.breakTime = const Duration(seconds: 30),
     List<(Exercise, Duration)>? exercisesList,
     this.repetitions = 1,
-  }) : exercisesList = exercisesList ?? [];
+    Duration? interRepetitionBreak,
+  }) : exercisesList = exercisesList ?? [],
+       interRepetitionBreak = interRepetitionBreak ?? breakTime;
 
   Workout.fromJson(Map<String, dynamic> json, Iterable<Exercise> listExercises)
     : name = json['name'] as String,
       breakTime = Duration(seconds: json['breakTime'] as int),
       exercisesList = [],
-      repetitions = json['repetitions'] ?? 1 {
+      repetitions = json['repetitions'] ?? 1,
+      interRepetitionBreak =
+          json['interRepetitionBreak'] ??
+          Duration(seconds: json['breakTime'] as int) {
     description = json['description'] as String;
     if (description == '') {
       description = null;
@@ -47,6 +54,7 @@ class Workout implements Iterator {
       for (var e in exercisesList) [e.$1.name, e.$2.inSeconds],
     ],
     'repetitions': repetitions,
+    'interRepetitionBreak': interRepetitionBreak.inSeconds,
   };
 
   void add(Exercise e, Duration d) {
@@ -59,7 +67,9 @@ class Workout implements Iterator {
       return (GetReady(), Duration(seconds: 10));
     } else if (_current < exercisesList.length) {
       if (_currentIsBreak) {
-        return (Break(), breakTime);
+        return (_current < exercisesList.length - 1)
+            ? (Break(), breakTime)
+            : (Break(), interRepetitionBreak);
       } else {
         return exercisesList[_current];
       }
@@ -78,7 +88,7 @@ class Workout implements Iterator {
       if (_currentIsBreak) {
         return exercisesList[0];
       } else {
-        return (Break(), breakTime);
+        return (Break(), interRepetitionBreak);
       }
     }
     return null;

@@ -28,7 +28,7 @@ class _DurationPickerState extends State<DurationPicker> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        if (widget.text != null) Text(widget.text!),
+        if (widget.text != null) Flexible(child: Text(widget.text!)),
         NumberPicker(
           value: _min,
           minValue: 0,

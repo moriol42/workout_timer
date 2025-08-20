@@ -52,6 +52,7 @@ void editWorkout(
   Duration newBreakTime,
   List<(Exercise, Duration)> newExercisesList,
   int repetitions,
+  Duration interRepetitionBreak,
 ) {
   var i = _workouts.indexOf(w);
   _workouts[i].name = newName;
@@ -59,6 +60,7 @@ void editWorkout(
   _workouts[i].breakTime = newBreakTime;
   _workouts[i].exercisesList = newExercisesList;
   _workouts[i].repetitions = repetitions;
+  _workouts[i].interRepetitionBreak = interRepetitionBreak;
   storeWorkout();
 }
 

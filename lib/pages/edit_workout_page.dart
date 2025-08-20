@@ -23,6 +23,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
   late TextEditingController controllerDescr;
   late TextEditingController controllerRepet;
   late DurationPickerController controllerBreakTime;
+  late DurationPickerController controllerInterRepetBreak;
   List<(WorkoutExerciseCard, WorkoutExerciseController)> _exercisesCards = [];
   bool isChecked = false;
   bool _expanded = true;
@@ -36,6 +37,10 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
     );
     controllerRepet = TextEditingController(
       text: '${widget.workout?.repetitions ?? 1}',
+    );
+    controllerInterRepetBreak = DurationPickerController(
+      duration:
+          widget.workout?.interRepetitionBreak ?? const Duration(seconds: 90),
     );
 
     if (!widget.createNew) {
@@ -118,6 +123,15 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                     }
                     return null;
                   },
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                ),
+
+              if (_expanded && (int.tryParse(controllerRepet.text) ?? 0) > 1)
+                DurationPicker(
+                  text: 'Break time between repetitions:',
+                  controller: controllerInterRepetBreak,
                 ),
 
               SizedBox(height: 10),
@@ -169,6 +183,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                     breakTime: controllerBreakTime.duration,
                     exercisesList: newExercisesList,
                     repetitions: int.parse(controllerRepet.text),
+                    interRepetitionBreak: controllerInterRepetBreak.duration,
                   );
                   addWorkout(newWorkout);
                 } else {
@@ -179,6 +194,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                     controllerBreakTime.duration,
                     newExercisesList,
                     int.parse(controllerRepet.text),
+                    controllerInterRepetBreak.duration
                   );
                 }
                 Navigator.pop(context, true);
