@@ -7,8 +7,9 @@ class Workout implements Iterator {
   List<(Exercise, Duration)> exercisesList;
   int _current = 0;
   int _currentRepetition = 0;
-  bool _currentIsBreak = false;
+  bool _currentIsBreak = true;
   int repetitions;
+  bool _started = false; 
 
   Workout({
     required this.name,
@@ -54,7 +55,9 @@ class Workout implements Iterator {
 
   @override
   (BaseExercise, Duration)? get current {
-    if (_current < exercisesList.length) {
+    if (!_started) {
+      return (GetReady(), Duration(seconds: 10));
+    } else if (_current < exercisesList.length) {
       if (_currentIsBreak) {
         return (Break(), breakTime);
       } else {
@@ -83,7 +86,11 @@ class Workout implements Iterator {
 
   @override
   bool moveNext() {
-    if (_current < exercisesList.length - 1) {
+    if (!_started) {
+      _started = true;
+      _currentIsBreak = false;
+      return true;
+    } else if (_current < exercisesList.length - 1) {
       if (_currentIsBreak) {
         _current++;
       }
@@ -102,7 +109,8 @@ class Workout implements Iterator {
   }
 
   void resetIterator() {
-    _currentIsBreak = false;
+    _currentIsBreak = true;
+    _started = false;
     _current = 0;
     _currentRepetition = 0;
   }

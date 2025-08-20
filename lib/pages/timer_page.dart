@@ -67,7 +67,6 @@ class _TimerPageState extends State<TimerPage> {
               isReverse: true,
               isReverseAnimation: true,
               onComplete: () async {
-                await player.stop();
                 await player.play(AssetSource('gong.mp3'));
 
                 if (widget.workout.moveNext()) {
@@ -84,7 +83,6 @@ class _TimerPageState extends State<TimerPage> {
                 int sec = int.parse(value);
                 if (oldSec != sec) {
                   if (sec < 5) {
-                    await player.stop();
                     await player.play(AssetSource('beep.mp3'));
                   }
                   oldSec = sec;

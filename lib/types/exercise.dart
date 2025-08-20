@@ -34,3 +34,10 @@ class Break extends BaseExercise {
   @override
   bool isBreak() => true;
 }
+
+class GetReady extends BaseExercise {
+  GetReady() : super('Get ready');
+
+  @override
+  bool isBreak() => true;
+}
