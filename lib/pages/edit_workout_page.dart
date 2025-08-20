@@ -23,8 +23,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
   late TextEditingController controllerDescr;
   late TextEditingController controllerRepet;
   late DurationPickerController controllerBreakTime;
-  final List<WorkoutExerciseController> _controllersExerciseCards = [];
-  List<WorkoutExerciseCard> _exercisesCards = [];
+  List<(WorkoutExerciseCard, WorkoutExerciseController)> _exercisesCards = [];
   bool isChecked = false;
   bool _expanded = true;
 
@@ -42,8 +41,20 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
     if (!widget.createNew) {
       _exercisesCards = widget.workout!.exercisesList.map((tuple) {
         var controller = WorkoutExerciseController(duration: tuple.$2);
-        _controllersExerciseCards.add(controller);
-        return WorkoutExerciseCard(exercise: tuple.$1, controller: controller);
+        return (
+          WorkoutExerciseCard(
+            key: Key(tuple.$1.name),
+            exercise: tuple.$1,
+            controller: controller,
+            onRemove: () {
+              _exercisesCards.removeWhere(
+                (x) => x.$1.exercise.name == tuple.$1.name,
+              );
+              setState(() {});
+            },
+          ),
+          controller,
+        );
       }).toList();
     }
 
@@ -55,6 +66,85 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
     controllerName.dispose();
     controllerDescr.dispose();
     super.dispose();
+  }
+
+  Widget topCard() {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(20.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: 8.0,
+            children: <Widget>[
+              TextFormField(
+                controller: controllerName,
+                decoration: const InputDecoration(labelText: 'Name'),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: controllerDescr,
+                decoration: const InputDecoration(
+                  labelText: 'Description (optional)',
+                ),
+              ),
+
+              if (_expanded)
+                DurationPicker(
+                  text: 'Break time:',
+                  controller: controllerBreakTime,
+                ),
+
+              if (_expanded)
+                TextFormField(
+                  controller: controllerRepet,
+                  decoration: const InputDecoration(
+                    labelText: 'Number of repetitions',
+
+                    suffixText: 'repetitions',
+                  ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter some number';
+                    }
+                    if (int.tryParse(value) == null) {
+                      return 'You must enter a number';
+                    }
+                    return null;
+                  },
+                ),
+
+              SizedBox(height: 10),
+              _expanded
+                  ? FilledButton.tonalIcon(
+                      icon: Icon(Icons.expand_less),
+                      label: Text('Less'),
+                      onPressed: () {
+                        setState(() {
+                          _expanded = !_expanded;
+                        });
+                      },
+                    )
+                  : FilledButton.tonalIcon(
+                      icon: Icon(Icons.expand_more),
+                      label: Text('More'),
+                      onPressed: () {
+                        setState(() {
+                          _expanded = !_expanded;
+                        });
+                      },
+                    ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -69,8 +159,8 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                 var descr = controllerDescr.text == ''
                     ? null
                     : controllerDescr.text;
-                var newExercisesList = _controllersExerciseCards
-                    .map((c) => (c.exercise, c.duration))
+                var newExercisesList = _exercisesCards
+                    .map((x) => (x.$2.exercise, x.$2.duration))
                     .toList();
                 if (widget.createNew) {
                   var newWorkout = Workout(
@@ -101,90 +191,20 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(8.0),
-          child: ListView(
+          child: ReorderableListView(
+            header: topCard(),
             padding: const EdgeInsets.all(8),
-            children: <Widget>[
-              Card(
-                child: Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      spacing: 8.0,
-                      children: <Widget>[
-                        TextFormField(
-                          controller: controllerName,
-                          decoration: const InputDecoration(labelText: 'Name'),
-                          validator: (String? value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter some text';
-                            }
-                            return null;
-                          },
-                        ),
-                        TextFormField(
-                          controller: controllerDescr,
-                          decoration: const InputDecoration(
-                            labelText: 'Description (optional)',
-                          ),
-                        ),
-
-                        if (_expanded)
-                          DurationPicker(
-                            text: 'Break time:',
-                            controller: controllerBreakTime,
-                          ),
-
-                        if (_expanded)
-                          TextFormField(
-                            controller: controllerRepet,
-                            decoration: const InputDecoration(
-                              labelText: 'Number of repetitions',
-
-                              suffixText: 'repetitions',
-                            ),
-                            validator: (String? value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter some number';
-                              }
-                              if (int.tryParse(value) == null) {
-                                return 'You must enter a number';
-                              }
-                              return null;
-                            },
-                          ),
-
-                        SizedBox(height: 10),
-                        FilledButton.tonal(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: _expanded
-                                ? [
-                                    Text('Less'),
-                                    SizedBox(width: 5),
-                                    Icon(Icons.expand_less),
-                                  ]
-                                : [
-                                    Text('More'),
-                                    SizedBox(width: 5),
-                                    Icon(Icons.expand_more),
-                                  ],
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _expanded = !_expanded;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              for (var c in _exercisesCards) c,
-              SizedBox(height: 60),
-            ],
+            onReorder: (int oldIndex, int newIndex) {
+              setState(() {
+                if (oldIndex < newIndex) {
+                  newIndex -= 1;
+                }
+                final item = _exercisesCards.removeAt(oldIndex);
+                _exercisesCards.insert(newIndex, item);
+              });
+            },
+            footer: SizedBox(height: 60),
+            children: _exercisesCards.map((x) => x.$1).toList(),
           ),
         ),
       ),
@@ -195,7 +215,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
             builder: (_) {
               return StatefulBuilder(
                 builder: (BuildContext contextPopup, StateSetter myState) =>
-                     ExerciseChooser(),
+                    ExerciseChooser(),
               );
             },
           );
@@ -203,10 +223,20 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
           if (exercisesList?.isNotEmpty ?? false) {
             for (var e in exercisesList!) {
               var c = WorkoutExerciseController();
-              _exercisesCards.add(
-                WorkoutExerciseCard(exercise: e, controller: c),
-              );
-              _controllersExerciseCards.add(c);
+              _exercisesCards.add((
+                WorkoutExerciseCard(
+                  key: Key(e.name),
+                  exercise: e,
+                  controller: c,
+                  onRemove: () {
+                    _exercisesCards.removeWhere(
+                      (x) => x.$1.exercise.name == e.name,
+                    );
+                    setState(() {});
+                  },
+                ),
+                c,
+              ));
             }
             setState(() {});
           }

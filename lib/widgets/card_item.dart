@@ -56,14 +56,6 @@ class _CardItemState extends State<CardItem> {
             ),
           ],
         ),
-        //  Row(
-        //   children: [
-        //     if (widget.editFn != null)
-        //       IconButton(onPressed: widget.editFn, icon: Icon(Icons.edit)),
-        //     if (widget.deleteFn != null)
-        //       IconButton(onPressed: widget.deleteFn, icon: Icon(Icons.delete)),
-        //   ],
-        // ),
         onTap: widget.onTap,
       ),
     );

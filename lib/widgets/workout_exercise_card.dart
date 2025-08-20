@@ -8,10 +8,12 @@ class WorkoutExerciseCard extends StatefulWidget {
     super.key,
     required this.exercise,
     this.controller,
+    this.onRemove,
   });
 
   final WorkoutExerciseController? controller;
   final Exercise exercise;
+  final void Function()? onRemove;
 
   @override
   State<WorkoutExerciseCard> createState() => _WorkoutExerciseCardState();
@@ -70,16 +72,13 @@ class _WorkoutExerciseCardState extends State<WorkoutExerciseCard> {
               ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Spacer(),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.arrow_upward)),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.arrow_downward),
+                  FilledButton.tonalIcon(
+                    onPressed: widget.onRemove,
+                    label: Text('Delete'),
+                    icon: Icon(Icons.delete),
                   ),
-                  Spacer(),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
                 ],
               ),
             ],
@@ -88,40 +87,21 @@ class _WorkoutExerciseCardState extends State<WorkoutExerciseCard> {
       );
     } else {
       return Card(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 3,
-            children: [
-              Row(
-                children: [
-                  IconButton(onPressed: () {}, icon: Icon(Icons.arrow_upward)),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.arrow_downward),),
-
-                  SizedBox(width: 20),
-                  Text(
-                    _exercise.name,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(width: 20),
-                  Text(
-                    '${controllerTime.duration.inMinutes}:${controllerTime.duration.inSeconds % 60}',
-                  ),
-                  Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _expanded = !_expanded;
-                      });
-                    },
-                    icon: Icon(Icons.expand_more),
-                  ),
-                ],
-              ),
-            ],
+        child: ListTile(
+          title: Text(
+            _exercise.name,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            '${controllerTime.duration.inMinutes}:${controllerTime.duration.inSeconds % 60}',
+          ),
+          trailing: IconButton(
+            onPressed: () {
+              setState(() {
+                _expanded = !_expanded;
+              });
+            },
+            icon: Icon(Icons.expand_more),
           ),
         ),
       );
