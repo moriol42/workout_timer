@@ -34,11 +34,13 @@ class _DurationPickerState extends State<DurationPicker> {
           minValue: 0,
           maxValue: 60,
           onChanged: (value) {
-            widget.controller?.duration = Duration(
-              minutes: _min,
-              seconds: _sec,
-            );
-            setState(() => _min = value);
+            setState(() {
+              _min = value;
+              widget.controller?.duration = Duration(
+                minutes: _min,
+                seconds: _sec,
+              );
+            });
             if (widget.onChanged != null) widget.onChanged!();
           },
         ),
@@ -48,11 +50,13 @@ class _DurationPickerState extends State<DurationPicker> {
           minValue: 1,
           maxValue: 60,
           onChanged: (value) {
-            widget.controller?.duration = Duration(
-              minutes: _min,
-              seconds: _sec,
-            );
-            setState(() => _sec = value);
+            setState(() {
+              _sec = value;
+              widget.controller?.duration = Duration(
+                minutes: _min,
+                seconds: _sec,
+              );
+            });
             if (widget.onChanged != null) widget.onChanged!();
           },
         ),
