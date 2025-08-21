@@ -20,30 +20,25 @@ class _ExerciseChooserState extends State<ExerciseChooser> {
         style: Theme.of(context).textTheme.headlineSmall,
       ),
       contentPadding: const EdgeInsets.all(16.0),
-      content: DefaultTextStyle(
-        style: Theme.of(context).textTheme.bodyMedium!,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              for (var (i, e) in iterExercises().indexed)
-                Row(
-                  children: [
-                    Checkbox(
-                      value: isChecked[i],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          isChecked[i] = value!;
-                        });
-                      },
-                    ),
-                    Text(
-                      e.name,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ],
-                ),
-            ],
-          ),
+      contentTextStyle: Theme.of(context).textTheme.bodyMedium,
+      content: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            for (var (i, e) in iterExercises().indexed)
+              Row(
+                children: [
+                  Checkbox(
+                    value: isChecked[i],
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isChecked[i] = value!;
+                      });
+                    },
+                  ),
+                  Text(e.name, style: Theme.of(context).textTheme.titleMedium),
+                ],
+              ),
+          ],
         ),
       ),
       actions: [
