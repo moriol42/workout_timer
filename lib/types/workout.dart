@@ -29,8 +29,7 @@ class Workout implements Iterator {
       exercisesList = [],
       repetitions = json['repetitions'] ?? 1,
       interRepetitionBreak =
-          json['interRepetitionBreak'] ??
-          Duration(seconds: json['breakTime'] as int) {
+          Duration(seconds: json['interRepetitionBreak'] as int) {
     description = json['description'] as String;
     if (description == '') {
       description = null;
