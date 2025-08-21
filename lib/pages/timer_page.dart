@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../types/workout.dart';
 import '../widgets/congratulation_dialog.dart';
@@ -26,11 +27,14 @@ class _TimerPageState extends State<TimerPage> {
     widget.workout.resetIterator();
 
     player.setReleaseMode(ReleaseMode.stop);
+
+    WakelockPlus.enable();
   }
 
   @override
   void dispose() {
     player.dispose();
+    WakelockPlus.disable();
 
     super.dispose();
   }
