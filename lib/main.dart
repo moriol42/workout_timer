@@ -11,8 +11,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-List<String> navTitles = <String>['Workout', 'Exercises'];
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -35,6 +33,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class NavDest {
+  const NavDest(this.label, this.icon, this.selectedIcon);
+
+  final String label;
+  final Widget icon;
+  final Widget selectedIcon;
+}
+
 class MainNavBar extends StatefulWidget {
   const MainNavBar({super.key});
 
@@ -44,9 +50,60 @@ class MainNavBar extends StatefulWidget {
 
 class _MainNavBarState extends State<MainNavBar> {
   int currentPageIndex = 0;
+  final destinations = [
+    NavDest('Workout', Icon(Icons.assignment_outlined), Icon(Icons.assignment)),
+    NavDest(
+      'Exercise',
+      Icon(Icons.fitness_center_outlined),
+      Icon(Icons.fitness_center),
+    ),
+  ];
 
-  @override
-  Widget build(BuildContext context) {
+  Widget body() {
+    return <Widget>[
+      /// Workouts page
+      WorkoutsPage(title: 'Workouts'),
+
+      /// Exercises page
+      ExercisesPage(title: 'Exercises'),
+    ][currentPageIndex];
+  }
+
+  Widget buildScafoldNavRail() {
+    bool extended = MediaQuery.of(context).size.width >= 700;
+    return Scaffold(
+      body: Row(
+        children: [
+          NavigationRail(
+            destinations: destinations
+                .map(
+                  (d) => NavigationRailDestination(
+                    icon: d.icon,
+                    selectedIcon: d.selectedIcon,
+                    label: Text(d.label),
+                    padding: const EdgeInsets.symmetric(horizontal:  5.0, vertical: 8.0),
+                  ),
+                )
+                .toList(),
+            selectedIndex: currentPageIndex,
+            onDestinationSelected: (int index) {
+              setState(() {
+                currentPageIndex = index;
+              });
+            },
+            extended: extended,
+            labelType: extended
+                ? NavigationRailLabelType.none
+                : NavigationRailLabelType.all,
+          ),
+          const VerticalDivider(),
+          Expanded(child: body()),
+        ],
+      ),
+    );
+  }
+
+  Widget buildScafoldBottomNavBar() {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentPageIndex,
@@ -55,24 +112,25 @@ class _MainNavBarState extends State<MainNavBar> {
             currentPageIndex = index;
           });
         },
-        destinations: <Widget>[
-          NavigationDestination(
-            icon: Icon(Icons.assignment),
-            label: navTitles[0],
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.fitness_center),
-            label: navTitles[1],
-          ),
-        ],
+        destinations: destinations
+            .map(
+              (d) => NavigationDestination(
+                icon: d.icon,
+                label: d.label,
+                selectedIcon: d.selectedIcon,
+                tooltip: d.label,
+              ),
+            )
+            .toList(),
       ),
-      body: <Widget>[
-        /// Workouts page
-        WorkoutsPage(title: 'Workouts'),
-
-        /// Exercises page
-        ExercisesPage(title: 'Exercises'),
-      ][currentPageIndex],
+      body: body(),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MediaQuery.of(context).size.width >= 450
+        ? buildScafoldNavRail()
+        : buildScafoldBottomNavBar();
   }
 }
