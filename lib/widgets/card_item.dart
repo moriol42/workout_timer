@@ -1,61 +1,52 @@
 import 'package:flutter/material.dart';
 
-enum Actions { delete, edit }
+class CardMenuEntry<T> {
+  final T value;
+  final Widget icon;
+  final Widget title;
 
-class CardItem extends StatefulWidget {
+  const CardMenuEntry(this.value, this.icon, this.title);
+}
+
+class CardItem<T> extends StatefulWidget {
   const CardItem({
     super.key,
     required this.title,
     this.description,
     this.onTap,
-    this.deleteFn,
-    this.editFn,
+    this.menuEntries = const [],
+    this.onSelected,
   });
 
   final String title;
   final String? description;
   final Function()? onTap;
-  final Function()? deleteFn;
-  final Function()? editFn;
+  final void Function(T)? onSelected;
+  final List<CardMenuEntry<T>> menuEntries;
 
   @override
-  State<CardItem> createState() => _CardItemState();
+  State<CardItem<T>> createState() => _CardItemState();
 }
 
-class _CardItemState extends State<CardItem> {
+class _CardItemState<T> extends State<CardItem<T>> {
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
         title: Text(widget.title),
         subtitle: widget.description != null ? Text(widget.description!) : null,
-        trailing: PopupMenuButton(
-          onSelected: (Actions action) {
-            setState(() {
-              switch (action) {
-                case Actions.delete:
-                  widget.deleteFn!();
-                  break;
-                case Actions.edit:
-                  widget.editFn!();
-              }
-            });
-          },
-          itemBuilder: (BuildContext context) => <PopupMenuEntry<Actions>>[
-            if (widget.editFn != null)
-              const PopupMenuItem<Actions>(
-                value: Actions.edit,
-                child: ListTile(leading: Icon(Icons.edit), title: Text('Edit')),
-              ),
-            const PopupMenuItem<Actions>(
-              value: Actions.delete,
-              child: ListTile(
-                leading: Icon(Icons.delete),
-                title: Text('Remove'),
-              ),
-            ),
-          ],
-        ),
+        trailing: widget.menuEntries.isNotEmpty
+            ? PopupMenuButton<T>(
+                onSelected: widget.onSelected,
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<T>>[
+                  for (var e in widget.menuEntries)
+                    PopupMenuItem<T>(
+                      value: e.value,
+                      child: ListTile(leading: e.icon, title: e.title),
+                    ),
+                ],
+              )
+            : null,
         onTap: widget.onTap,
       ),
     );

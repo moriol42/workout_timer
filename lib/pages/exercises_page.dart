@@ -4,6 +4,8 @@ import '../widgets/card_item.dart';
 import 'edit_exercise_page.dart';
 import '../back/back.dart';
 
+enum ExerciseCardActions { delete }
+
 class ExercisesPage extends StatefulWidget {
   const ExercisesPage({super.key, required this.title});
 
@@ -18,7 +20,6 @@ class _ExercisesPageState extends State<ExercisesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
       body: Padding(
@@ -30,10 +31,22 @@ class _ExercisesPageState extends State<ExercisesPage> {
                 CardItem(
                   title: e.name,
                   description: e.description,
-                  deleteFn: () {
-                    removeExercise(e);
-                    setState(() {});
+                  onSelected: (ExerciseCardActions action) {
+                    switch (action) {
+                      case ExerciseCardActions.delete:
+                        setState(() {
+                          removeExercise(e);
+                        });
+                        break;
+                    }
                   },
+                  menuEntries: [
+                    CardMenuEntry(
+                      ExerciseCardActions.delete,
+                      Icon(Icons.delete),
+                      Text('Delete'),
+                    ),
+                  ],
                   onTap: () async {
                     bool? shouldRefresh = await Navigator.push<bool>(
                       context,
