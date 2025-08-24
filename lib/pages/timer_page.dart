@@ -39,73 +39,101 @@ class _TimerPageState extends State<TimerPage> {
     super.dispose();
   }
 
+  void previousExercise() {
+    widget.workout.moveBack();
+    _controller.restart(duration: widget.workout.current!.$2.inSeconds);
+    setState(() {});
+  }
+
+  void nextExercise() {
+    if (widget.workout.moveNext()) {
+      _controller.restart(duration: widget.workout.current!.$2.inSeconds);
+      setState(() {});
+    } else {
+      _controller.pause();
+      Navigator.of(context).push(GongratulationDialog<void>());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(title: Text(widget.workout.name)),
-      body: Column(
-        children: [
-          Text(
-            widget.workout.current?.$1.name ?? '',
-            style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
-          ),
-          Center(
-            child: CircularCountDownTimer(
-              duration: widget.workout.current!.$2.inSeconds,
-              controller: _controller,
-              width: MediaQuery.of(context).size.width / 2,
-              height: MediaQuery.of(context).size.height / 2,
-              ringColor: theme.colorScheme.brightness == Brightness.dark
-                  ? Colors.grey[800]!
-                  : Colors.grey[300]!,
-              fillColor: theme.colorScheme.primary,
-              strokeWidth: 15.0,
-              strokeCap: StrokeCap.round,
-              textStyle: const TextStyle(
-                fontSize: 33.0,
-                fontWeight: FontWeight.bold,
-              ),
-              textFormat: CountdownTextFormat.S,
-              isReverse: true,
-              isReverseAnimation: true,
-              onComplete: () async {
-                await player.play(AssetSource('gong.mp3'));
-
-                if (widget.workout.moveNext()) {
-                  _controller.restart(
-                    duration: widget.workout.current!.$2.inSeconds,
-                  );
-
-                  setState(() {});
-                } else {
-                  Navigator.of(context).push(GongratulationDialog<void>());
-                }
-              },
-              onChange: (value) async {
-                int sec = int.parse(value);
-                if (oldSec != sec) {
-                  if (sec < 5) {
-                    await player.play(AssetSource('beep.mp3'));
-                  }
-                  oldSec = sec;
-                }
-              },
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(
+              widget.workout.current?.$1.name ?? '',
+              style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
             ),
-          ),
-          if (widget.workout.next != null)
-            Text('Next exercise is: ${widget.workout.next!.$1.name}'),
-        ],
+            Center(
+              child: CircularCountDownTimer(
+                duration: widget.workout.current!.$2.inSeconds,
+                controller: _controller,
+                width: MediaQuery.of(context).size.width / 2,
+                height: MediaQuery.of(context).size.height / 2,
+                ringColor: theme.colorScheme.brightness == Brightness.dark
+                    ? Colors.grey[800]!
+                    : Colors.grey[300]!,
+                fillColor: theme.colorScheme.primary,
+                strokeWidth: 15.0,
+                strokeCap: StrokeCap.round,
+                textStyle: const TextStyle(
+                  fontSize: 33.0,
+                  fontWeight: FontWeight.bold,
+                ),
+                textFormat: CountdownTextFormat.S,
+                isReverse: true,
+                isReverseAnimation: true,
+                onComplete: () async {
+                  await player.play(AssetSource('gong.mp3'));
+
+                  nextExercise();
+                },
+                onChange: (value) async {
+                  int sec = int.parse(value);
+                  if (oldSec != sec) {
+                    if (sec < 5) {
+                      await player.play(AssetSource('beep.mp3'));
+                    }
+                    oldSec = sec;
+                  }
+                },
+              ),
+            ),
+            if (widget.workout.next != null)
+              Text('Next exercise is: ${widget.workout.next!.$1.name}'),
+
+            Row(
+              children: [
+                IconButton(
+                  onPressed: previousExercise,
+                  icon: Icon(Icons.skip_previous),
+                  tooltip: 'Previous exercise',
+                ),
+                Spacer(),
+                IconButton(
+                  onPressed: nextExercise,
+                  icon: Icon(Icons.skip_next),
+                  tooltip: 'Next exercise',
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (_controller.isPaused.value) {
-            _controller.resume();
-          } else {
-            _controller.pause();
-          }
-          setState(() {});
+          setState(() {
+            if (_controller.isPaused.value) {
+              _controller.resume();
+            } else {
+              _controller.pause();
+            }
+          });
         },
         child: Icon(
           _controller.isPaused.value ? Icons.play_arrow : Icons.pause,

@@ -28,8 +28,9 @@ class Workout implements Iterator {
       breakTime = Duration(seconds: json['breakTime'] as int),
       exercisesList = [],
       repetitions = json['repetitions'] ?? 1,
-      interRepetitionBreak =
-          Duration(seconds: json['interRepetitionBreak'] as int) {
+      interRepetitionBreak = Duration(
+        seconds: json['interRepetitionBreak'] as int,
+      ) {
     description = json['description'] as String;
     if (description == '') {
       description = null;
@@ -79,7 +80,8 @@ class Workout implements Iterator {
   (BaseExercise, Duration)? get next {
     if (!_started) {
       return exercisesList[0];
-    } if (_current < exercisesList.length - 1) {
+    }
+    if (_current < exercisesList.length - 1) {
       if (_currentIsBreak) {
         return exercisesList[_current + 1];
       } else {
@@ -116,6 +118,31 @@ class Workout implements Iterator {
       return true;
     } else {
       return false;
+    }
+  }
+
+  bool moveBack() {
+    if (!_started) {
+      return false;
+    } else if (_current > 0) {
+      if (!_currentIsBreak) {
+        _current--;
+      }
+      _currentIsBreak = !_currentIsBreak;
+      return true;
+    } else if (_currentRepetition > 0) {
+      if (!_currentIsBreak) {
+        _current = exercisesList.length - 1;
+        _currentRepetition--;
+      }
+      _currentIsBreak = !_currentIsBreak;
+      return true;
+    } else {
+      if (!_currentIsBreak) {
+        _started = false;
+      }
+      _currentIsBreak = !_currentIsBreak;
+      return true;
     }
   }
 
