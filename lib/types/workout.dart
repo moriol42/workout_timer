@@ -77,7 +77,9 @@ class Workout implements Iterator {
   }
 
   (BaseExercise, Duration)? get next {
-    if (_current < exercisesList.length - 1) {
+    if (!_started) {
+      return exercisesList[0];
+    } if (_current < exercisesList.length - 1) {
       if (_currentIsBreak) {
         return exercisesList[_current + 1];
       } else {
